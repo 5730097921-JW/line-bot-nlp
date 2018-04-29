@@ -93,9 +93,9 @@ def get_intention(sentence):
     data = data[:49] + [0]*(49 - len(data))
     data = np.array([data])
     intention = intent.predict(data)
-    print(intention)
+    # print(intention)
     intention = intention[0].argmax()
-    print(intention)
+    # print(intention)
     return intention
 
 def get_user(userid):
@@ -105,14 +105,14 @@ def get_user(userid):
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
-    # userid = event.source.userId
-    print(message)
-    # print(userid)
+    userid = event.source.userId
+    # print(message)
+    print(userid)
     intention = get_intention(message)
     print(intention)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=(message))
+        TextSendMessage(text=(message+str(intention)))
     )
 
 
