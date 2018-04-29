@@ -58,6 +58,7 @@ with open('intent_arch.json') as json_data:
     intent_arch = json_data.read()
 intent =  model_from_json(intent_arch)
 intent.load_weights('model_weights.h5')
+intent.summary()
 dictionary = pickle.load(open('dictionary.pickle','rb'))
 
 @app.route("/callback", methods=['POST'])
@@ -87,28 +88,27 @@ def to_index(sen):
     return ret
 
 def get_intention(sentence):
-    print("1")
     data = word_tokenize(sentence)
-    print("2")
     data = to_index(data)
-    print("3")
     data = data[:49] + [0]*(49 - len(data))
-    print("4")
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
     return intention
 
+def get_user(userid):
+    cursor = connection.cursor()
+    query = ""
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
     print(message)
-    intent = get_intention(message)
-    print(intent)
+    intention = get_intention(message)
+    print(intention)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=(message+str(intent)))
+        TextSendMessage(text=(message+str(intention)))
     )
 
 
