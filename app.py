@@ -95,6 +95,7 @@ def get_intention(sentence):
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
+    print(intention)
     return intention
 
 def get_user(userid):
@@ -111,7 +112,7 @@ def message_text(event):
     print(intention)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=(message+str(intention)))
+        TextSendMessage(text=(message))
     )
 
 
