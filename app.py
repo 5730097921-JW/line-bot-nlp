@@ -15,6 +15,17 @@
 import os
 import sys
 from argparse import ArgumentParser
+from pythainlp import word_tokenize
+from keras.models import model_from_json
+import pickle
+import pymysql
+import datetime
+
+# Connect to the database
+connection = pymysql.connect(host='sql12.freemysqlhosting.net',
+                             user='sql12235366',                                                   
+                             password='49VyS4LHJS',
+                             database='sql12235366')
 
 from flask import Flask, request, abort
 from linebot import (
@@ -42,6 +53,10 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+intent =  model_from_json('intent_arch.json')
+intent.load_weights('intent_weights.h5')
+with ('dictionary.pickle','rb') as f:
+        dictionary = pickle.load(f)
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -60,12 +75,32 @@ def callback():
 
     return 'OK'
 
+def to_index(sen):
+    ret = []
+    for word in sen:
+        try:
+            ret.append(dictionary[word])
+        except KeyError:
+            ret.append(dictionary['UNK'])
+    return ret
+
+def get_intention(sentence):
+    data = word_tokenize(sentence)
+    data = to_index(data)
+    while len(data)<49:
+        data.append(0)
+    intention = intent.predict(data)
+    intention = intention.index(max(intention))
+    return intention
+
 
 @handler.add(MessageEvent, message=TextMessage)
-def message_text(event):
+def message_text(event):  
+    intent = get_intention(event.message.text)
+    print(intent)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text)
+        TextSendMessage(text=(event.message.text+str(intention)))
     )
 
 
