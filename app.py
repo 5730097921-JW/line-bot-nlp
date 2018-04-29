@@ -104,6 +104,7 @@ def get_user(userid):
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
+    print(event)
     message = event.message.text
     userid = event.source.userId
     # print(message)
