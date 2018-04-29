@@ -87,9 +87,13 @@ def to_index(sen):
     return ret
 
 def get_intention(sentence):
+    print("1")
     data = word_tokenize(sentence)
+    print("2")
     data = to_index(data)
+    print("3")
     data = data[:49] + [0]*(49 - len(data))
+    print("4")
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
