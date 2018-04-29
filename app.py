@@ -90,7 +90,7 @@ def get_intention(sentence):
     data = word_tokenize(sentence)
     data = to_index(data)
     data = data[:49] + [0]*(49 - len(data))
-    intent.summary()
+    print(data)
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
