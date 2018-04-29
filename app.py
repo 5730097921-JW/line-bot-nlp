@@ -57,7 +57,7 @@ handler = WebhookHandler(channel_secret)
 with open('intent_arch.json') as json_data:
     intent_arch = json_data.read()
 intent =  model_from_json(intent_arch)
-intent.load_weights('intent_weights.h5')
+intent.load_weights('model_weights.h5')
 with ('dictionary.pickle','rb') as f:
         dictionary = pickle.load(f)
 
