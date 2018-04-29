@@ -58,7 +58,6 @@ with open('intent_arch.json') as json_data:
     intent_arch = json_data.read()
 intent =  model_from_json(intent_arch)
 intent.load_weights('model_weights.h5')
-intent.summary()
 dictionary = pickle.load(open('dictionary.pickle','rb'))
 
 @app.route("/callback", methods=['POST'])
@@ -91,6 +90,7 @@ def get_intention(sentence):
     data = word_tokenize(sentence)
     data = to_index(data)
     data = data[:49] + [0]*(49 - len(data))
+    intent.summary()
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
