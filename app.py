@@ -98,20 +98,25 @@ def get_intention(sentence):
     # print(intention)
     return intention
 
-def get_user(userid):
-    cursor = connection.cursor()
-    query = ""
+def get_user(userid,items):
+    try:
+        cursor = connection.cursor()
+        query = "SELECT * FROM chatbot WHERE `session_id`=%s"
+        cursor.execute(sql, (userid))
+        result = cursor.fetchone()
+        if not result:
+            sql = "INSERT INTO `users` (`sessionid`) VALUES (%s)"
+            cursor.execute(sql, (user_id))
+            connection.commit()
+    return result
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
-    print(message)
-    print(event)
     userid = event.source.user_id
     # print(message)
-    print(userid)
     intention = get_intention(message)
-    print(intention)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=(message+str(intention)))
