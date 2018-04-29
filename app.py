@@ -26,7 +26,7 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
-
+# kuy
 app = Flask(__name__)
 
 # get channel_secret and channel_access_token from your environment variable
