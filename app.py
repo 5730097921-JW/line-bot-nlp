@@ -89,8 +89,7 @@ def to_index(sen):
 def get_intention(sentence):
     data = word_tokenize(sentence)
     data = to_index(data)
-    while len(data)<49:
-        data.append(0)
+    data = data[:49] + [0]*(49 - len(data))
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
@@ -102,6 +101,7 @@ def message_text(event):
     message = event.message.text
     print(message)
     intent = get_intention(message)
+    print(intent)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=(message+str(intent)))
