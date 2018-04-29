@@ -20,6 +20,7 @@ from keras.models import model_from_json
 import pickle
 import pymysql
 import datetime
+import json
 
 # Connect to the database
 connection = pymysql.connect(host='sql12.freemysqlhosting.net',
@@ -53,7 +54,10 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-intent =  model_from_json('intent_arch.json')
+with open('intent_arch.json') as json_data:
+    intent_arch = json.load(json_data)
+    print(d)
+intent =  model_from_json(intent_arch)
 intent.load_weights('intent_weights.h5')
 with ('dictionary.pickle','rb') as f:
         dictionary = pickle.load(f)
