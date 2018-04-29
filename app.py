@@ -99,12 +99,11 @@ def get_intention(sentence):
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    app.logger.info("Event: " + event) 
-    # intent = get_intention(event.message.text)
-    # print(intent)
+    message = event.message.text
+    intent = get_intention(message)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=(event.message.text))
+        TextSendMessage(text=(message+str(intent)))
     )
 
 
