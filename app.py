@@ -55,7 +55,7 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 with open('intent_arch.json') as json_data:
-    intent_arch = json.load(json_data)
+    intent_arch = json_data.read()
 intent =  model_from_json(intent_arch)
 intent.load_weights('intent_weights.h5')
 with ('dictionary.pickle','rb') as f:
