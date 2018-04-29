@@ -100,6 +100,7 @@ def get_intention(sentence):
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
+    print(message)
     intent = get_intention(message)
     line_bot_api.reply_message(
         event.reply_token,
