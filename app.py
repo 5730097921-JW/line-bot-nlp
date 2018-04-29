@@ -98,7 +98,20 @@ def get_intention(sentence):
     # print(intention)
     return intention
 
-def get_user(userid,items):
+"""
+DB (session_id,brand,model,capa,color,price)
+"""
+def escape_name(s):
+    """Escape name to avoid SQL injection and keyword clashes.
+
+    Doubles embedded backticks, surrounds the whole in backticks.
+
+    Note: not security hardened, caveat emptor.
+
+    """
+    return '`{}`'.format(s.replace('`', '``'))
+
+def manage_user(userid,items):
     try:
         cursor = connection.cursor()
         query = "SELECT * FROM chatbot WHERE `session_id`=%s"
@@ -108,6 +121,12 @@ def get_user(userid,items):
             sql = "INSERT INTO `users` (`sessionid`) VALUES (%s)"
             cursor.execute(sql, (user_id))
             connection.commit()
+            names = list(items)
+            cols = ', '.join(map(escape_name, names))  # assumes the keys are *valid column names*.
+            placeholders = ', '.join(['%({})s'.format(name) for name in names])
+
+            query = 'INSERT INTO TABLENAME ({}) VALUES ({})'.format(cols, list(items.values()))
+            cursor.execute(query, items)
     return result
 
 
