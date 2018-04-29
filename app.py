@@ -105,7 +105,8 @@ def get_user(userid):
 def message_text(event):
     message = event.message.text
     userid = event.source.userId
-    print(message,userid)
+    print(message)
+    print(userid)
     intention = get_intention(message)
     print(intention)
     line_bot_api.reply_message(
