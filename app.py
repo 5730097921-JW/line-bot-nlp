@@ -58,8 +58,7 @@ with open('intent_arch.json') as json_data:
     intent_arch = json_data.read()
 intent =  model_from_json(intent_arch)
 intent.load_weights('model_weights.h5')
-with ('dictionary.pickle','rb') as f:
-        dictionary = pickle.load(f)
+dictionary = pickle.load(open('dictionary.pickle','rb'))
 
 @app.route("/callback", methods=['POST'])
 def callback():
