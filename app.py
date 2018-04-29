@@ -21,6 +21,7 @@ import pickle
 import pymysql
 import datetime
 import json
+import numpy as np
 
 # Connect to the database
 connection = pymysql.connect(host='sql12.freemysqlhosting.net',
@@ -90,7 +91,7 @@ def get_intention(sentence):
     data = word_tokenize(sentence)
     data = to_index(data)
     data = data[:49] + [0]*(49 - len(data))
-    print(data)
+    data = np.array([data])
     intention = intent.predict(data)
     print(intention)
     intention = intention.index(max(intention))
@@ -103,7 +104,8 @@ def get_user(userid):
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
-    print(message)
+    userid = event.source.userId
+    print(message,userid)
     intention = get_intention(message)
     print(intention)
     line_bot_api.reply_message(
