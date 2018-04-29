@@ -92,6 +92,7 @@ def get_intention(sentence):
     while len(data)<49:
         data.append(0)
     intention = intent.predict(data)
+    print(intention)
     intention = intention.index(max(intention))
     return intention
 
@@ -102,7 +103,7 @@ def message_text(event):
     print(intent)
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=(event.message.text+str(intention)))
+        TextSendMessage(text=(event.message.text+str(intent)))
     )
 
 
