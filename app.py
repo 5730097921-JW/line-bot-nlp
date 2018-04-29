@@ -104,10 +104,10 @@ def get_user(userid):
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
-    print(event)
     message = event.message.text
     print(message)
-    userid = event.source.userId
+    print(event)
+    userid = event.source.user_id
     # print(message)
     print(userid)
     intention = get_intention(message)
