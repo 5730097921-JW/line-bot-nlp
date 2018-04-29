@@ -94,7 +94,7 @@ def get_intention(sentence):
     data = np.array([data])
     intention = intent.predict(data)
     print(intention)
-    intention = intention.index(max(intention))
+    intention = intention[0].index(max(intention))
     print(intention)
     return intention
 
