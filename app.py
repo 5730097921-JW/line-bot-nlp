@@ -106,6 +106,7 @@ def get_user(userid):
 def message_text(event):
     print(event)
     message = event.message.text
+    print(message)
     userid = event.source.userId
     # print(message)
     print(userid)
