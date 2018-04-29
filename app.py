@@ -104,9 +104,9 @@ def get_user(userid):
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
     message = event.message.text
-    userid = event.source.userId
+    # userid = event.source.userId
     print(message)
-    print(userid)
+    # print(userid)
     intention = get_intention(message)
     print(intention)
     line_bot_api.reply_message(
