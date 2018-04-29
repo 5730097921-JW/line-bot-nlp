@@ -4,3 +4,4 @@ pythainlp
 keras
 pymysql
 gunicorn==19.0.0
+tensorflow
