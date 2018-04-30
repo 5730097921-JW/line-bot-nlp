@@ -285,13 +285,13 @@ def get_ans(message,intent,userid):
     insert_things(items)
     print("getting tag")
     answer = ''
-    if current_brand == '' and brand == '':
+    if current_brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
-    elif current_model == '' and model == '':
+    elif current_model == '':
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
-        if current_brand == 'apple' or brand=='apple':
-            if current_capacity == '' and capa == '':
+        if current_brand == 'apple':
+            if current_capacity == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -301,8 +301,8 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['price']
     elif prediction == '<INFO>':
-        if current_brand == 'apple' or brand == 'apple':
-            if current_capacity == '' or capa == '':
+        if current_brand == 'apple':
+            if current_capacity == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -312,10 +312,10 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description']
     elif prediction == '<BUY>':
-        if current_color == '' and color == '':
+        if current_color == '':
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
         elif current_brand == 'apple':
-            if current_capacity == '' and capa == '':
+            if current_capacity == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
