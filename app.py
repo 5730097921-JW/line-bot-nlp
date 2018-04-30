@@ -62,6 +62,16 @@ intent.load_weights('model_weights.h5')
 dictionary = pickle.load(open('dictionary.pickle','rb'))
 brand_dict_map = {'iphone':'apple','ไอโฟน':'apple','galaxy':'samsung'}
 
+color_dict = np.load('./color_dict.npy')
+color_dict = np.vectorize(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))(color_dict)
+color_dict = np.unique(color_dict)
+
+brand_dict = np.load('./brand_dict.npy')
+
+model_dict = np.load('./model_dict.npy')
+model_dict = np.vectorize(clean_model)(model_dict)
+model_dict = np.unique(model_dict)
+
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -107,7 +117,6 @@ def predict_tag(sen, debug=True):
     current_desc = ''
     if debug:
         print('sen:',sen)
-        print('predicted tag:')
     for brand in brand_dict:
         if sen.find(brand) != -1:
             if debug:
@@ -169,7 +178,7 @@ def escape_name(s):
     """
     return '`{}`'.format(s.replace('`', '``'))
 
-def manage_user(userid,items):
+def get_user(userid,items):
     cursor = connection.cursor()
     query = "SELECT * FROM chatbot WHERE `session_id`=%s"
     cursor.execute(sql, (userid))
@@ -190,6 +199,8 @@ def manage_user(userid,items):
     # cursor.execute(query, items)
     return result
 
+
+
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
 def get_ans(message,intent,userid):
@@ -197,6 +208,7 @@ def get_ans(message,intent,userid):
     print("getting ans")
     prediction = intent_dict[intent]
     print("got intent",prediction)
+
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     print("getting tag")
     answer = ''
