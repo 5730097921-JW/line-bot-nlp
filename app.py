@@ -182,12 +182,12 @@ def manage_user(userid,items):
             cursor.execute(sql, (user_id))
             connection.commit()
               # assumes the keys are *valid column names*.
-            query = 'INSERT INTO chatbot ({}) VALUES ({})'.format(cols, list(items.values()))
-            cursor.execute(query, items)
-        else:
-            ss = zip(cols, list(items.values())
-            query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
-            cursor.execute(query, items)
+        #     query = 'INSERT INTO chatbot ({}) VALUES ({})'.format(cols, list(items.values()))
+        #     cursor.execute(query, items)
+        # else:
+        #     ss = zip(cols, list(items.values())
+        #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+        #     cursor.execute(query, items)
     return result
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
