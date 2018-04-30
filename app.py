@@ -63,16 +63,6 @@ intent.load_weights('model_weights.h5')
 dictionary = pickle.load(open('dictionary.pickle','rb'))
 brand_dict_map = {'iphone':'apple','ไอโฟน':'apple','galaxy':'samsung'}
 
-df = pd.read_csv('data.csv',names=[0])
-df = df.drop_duplicates().dropna()
-label = df.applymap(lambda k: get_label(k))
-sentence = df.applymap(lambda k: clean_sentence(k))
-df = df.assign(sentence=sentence,label=label)
-df = df[(df['label'] != '') & (df['sentence']!="")]
-df = df.drop([0], axis=1)
-df.head(10)
-df.describe()
-
 mobile_df = pd.read_csv('mobile.csv',names=['brand','model','price','color','capacity','description'])
 mobile_df.color = mobile_df.color.apply(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))
 mobile_df.model = mobile_df.model.apply(lambda k: clean_model(k))
