@@ -62,6 +62,29 @@ intent.load_weights('model_weights.h5')
 dictionary = pickle.load(open('dictionary.pickle','rb'))
 brand_dict_map = {'iphone':'apple','ไอโฟน':'apple','galaxy':'samsung'}
 
+df = pd.read_csv('data.csv',names=[0])
+df = df.drop_duplicates().dropna()
+label = df.applymap(lambda k: get_label(k))
+sentence = df.applymap(lambda k: clean_sentence(k))
+df = df.assign(sentence=sentence,label=label)
+df = df[(df['label'] != '') & (df['sentence']!="")]
+df = df.drop([0], axis=1)
+df.head(10)
+df.describe()
+
+mobile_df = pd.read_csv('mobile.csv',names=['brand','model','price','color','capacity','description'])
+mobile_df.color = mobile_df.color.apply(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))
+mobile_df.model = mobile_df.model.apply(lambda k: clean_model(k))
+mobile_df.head()
+mobile_df.describe(include='all')
+
+data_df = pd.read_csv('data.csv',names=[0])
+data_df = data_df.drop_duplicates().dropna()
+sentence = data_df.applymap(lambda k: clean_sentence_for_tagging(k))
+data_df = data_df.assign(sentence=sentence)
+data_df = data_df[data_df['sentence']!=""]
+data_df = data_df.drop([0], axis=1)
+
 color_dict = np.load('./color_dict.npy')
 color_dict = np.vectorize(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))(color_dict)
 color_dict = np.unique(color_dict)
@@ -210,6 +233,7 @@ def get_ans(message,intent,userid):
     print("got intent",prediction)
 
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
+    
     print("getting tag")
     answer = ''
     if current_brand == '':
