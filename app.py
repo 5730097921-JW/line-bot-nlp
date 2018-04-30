@@ -229,13 +229,14 @@ def escape_name(s):
 
 def get_user(userid):
     cursor = connection.cursor()
-    query = "SELECT * FROM chatbot WHERE `session_id`=%s"
+    sql = "SELECT * FROM chatbot WHERE `session_id`=%s"
     cursor.execute(sql, (userid))
     result = cursor.fetchone()
+    print("queried",result)
     # names = list(items)
     # cols = ', '.join(map(escape_name, names))
     if not result:
-        sql = "INSERT INTO `chatbot` (`session_id`) VALUES (%s)"
+        sql = "INSERT INTO chatbot (`session_id`) VALUES (%s)"
         cursor.execute(sql, (userid))
         connection.commit()
         result = (userid,'','','','','')
