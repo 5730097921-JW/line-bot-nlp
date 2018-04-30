@@ -192,10 +192,11 @@ def manage_user(userid,items):
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
-def get_ans(message,intent):
+def get_ans(message,intent,userid):
     # tokens = word_tokenize(message)
     print("getting ans")
     prediction = intent_dict[intent]
+    print("got intent",prediction)
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=debug)
     print("getting tag")
     answer = ''
@@ -263,7 +264,7 @@ def message_text(event):
     userid = event.source.user_id
     # print(message)
     intention = get_intention(message)
-    ans=get_ans(message,intention)
+    ans=get_ans(message,intention,userid)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=(ans))
