@@ -215,7 +215,7 @@ def predict_tag(sen, debug=True):
     return current_brand, current_model, current_color, current_capacity, current_desc
 
 """
-DB (session_id,brand,model,capa,color,price)
+DB (session_id,brand,model,capa,color,address)
 """
 def escape_name(s):
     """Escape name to avoid SQL injection and keyword clashes.
@@ -227,7 +227,7 @@ def escape_name(s):
     """
     return '`{}`'.format(s.replace('`', '``'))
 
-def get_user(userid,items):
+def get_user(userid):
     cursor = connection.cursor()
     query = "SELECT * FROM chatbot WHERE `session_id`=%s"
     cursor.execute(sql, (userid))
@@ -238,6 +238,7 @@ def get_user(userid,items):
         sql = "INSERT INTO `chatbot` (`session_id`) VALUES (%s)"
         cursor.execute(sql, (userid))
         connection.commit()
+        result = (userid,'','','','','')
     #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
     #     cursor.execute(query, items)
     # else:
@@ -248,7 +249,11 @@ def get_user(userid,items):
     # cursor.execute(query, items)
     return result
 
-
+def insert_things(items):
+    cursor = connection.cursor()
+    query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
+    cursor.execute(query, items)
+    connection.commit()
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
@@ -257,18 +262,30 @@ def get_ans(message,intent,userid):
     print("getting ans")
     prediction = intent_dict[intent]
     print("got intent",prediction)
-
+    (userid,brand,model,capa,color,address) = get_user(userid)
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
-    
+    if current_brand != brand and not brand:
+        items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
+    else:
+        if current_model != model and not model:
+            current_model = model
+        if current_color != color and not color:
+            current_color = color
+        if current_capacity != capa and not capa:
+            curent_capacity = capa
+        if current_desc != address and not address:
+            current_desc = address
+        items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
+    insert_things(items)
     print("getting tag")
     answer = ''
-    if current_brand == '':
+    if current_brand == '' and brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
-    elif current_model == '':
+    elif current_model == '' and model == '':
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
-        if current_brand == 'apple':
-            if current_capacity == '':
+        if current_brand == 'apple' or brand=='apple':
+            if current_capacity == '' and capa == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -278,8 +295,8 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['price']
     elif prediction == '<INFO>':
-        if current_brand == 'apple':
-            if current_capacity == '':
+        if current_brand == 'apple' or brand == 'apple':
+            if current_capacity == '' or capa == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -289,13 +306,11 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description']
     elif prediction == '<BUY>':
-        if current_color == '':
+        if current_color == '' and color == '':
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
         elif current_brand == 'apple':
-            if current_capacity == '':
+            if current_capacity == '' and capa == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
-            elif current_address == '':
-                answer = 'กรุณาระบุที่อยู่สำหรับรับสินค้าด้วยครับ'
             else:
                 answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
                             brand: {}
@@ -306,9 +321,7 @@ def get_ans(message,intent,userid):
                                                   current_model,
                                                   current_color,
                                                   current_capacity,
-                                                  current_address)
-        elif current_address == '':
-            answer = 'กรุณาระบุที่อยู่สำหรับรับสินค้าด้วยครับ'
+                                                  current_desc)
         else:
             answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
                         brand: {}
@@ -317,7 +330,7 @@ def get_ans(message,intent,userid):
                         address: {}""".format(current_brand,
                                               current_model,
                                               current_color,
-                                              current_address)
+                                              current_desc)
     return answer
 
 @handler.add(MessageEvent, message=TextMessage)
