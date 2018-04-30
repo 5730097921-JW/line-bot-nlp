@@ -169,25 +169,25 @@ def escape_name(s):
     """
     return '`{}`'.format(s.replace('`', '``'))
 
-def manage_user(userid,items):
-    cursor = connection.cursor()
-    query = "SELECT * FROM chatbot WHERE `session_id`=%s"
-    cursor.execute(sql, (userid))
-    result = cursor.fetchone()
-    names = list(items)
-    cols = ', '.join(map(escape_name, names))
-    if not result:
-        sql = "INSERT INTO `chatbot` (`sessionid`) VALUES (%s)"
-        cursor.execute(sql, (user_id))
-        connection.commit()
-            # assumes the keys are *valid column names*.
-    #     query = 'INSERT INTO chatbot ({}) VALUES ({})'.format(cols, list(items.values()))
-    #     cursor.execute(query, items)
-    # else:
-    #     ss = zip(cols, list(items.values())
-    #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
-    #     cursor.execute(query, items)
-    return result
+# def manage_user(userid,items):
+#     cursor = connection.cursor()
+#     query = "SELECT * FROM chatbot WHERE `session_id`=%s"
+#     cursor.execute(sql, (userid))
+#     result = cursor.fetchone()
+#     names = list(items)
+#     cols = ', '.join(map(escape_name, names))
+#     if not result:
+#         sql = "INSERT INTO `chatbot` (`sessionid`) VALUES (%s)"
+#         cursor.execute(sql, (user_id))
+#         connection.commit()
+#             # assumes the keys are *valid column names*.
+#     #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
+#     #     cursor.execute(query, items)
+#     # else:
+#     #     ss = zip(cols, list(items.values())
+#     #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+#     #     cursor.execute(query, items)
+#     return result
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
