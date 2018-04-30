@@ -111,13 +111,6 @@ mobile_df.model = mobile_df.model.apply(lambda k: clean_model(k))
 mobile_df.head()
 mobile_df.describe(include='all')
 
-data_df = pd.read_csv('data.csv',names=[0])
-data_df = data_df.drop_duplicates().dropna()
-sentence = data_df.applymap(lambda k: clean_sentence_for_tagging(k))
-data_df = data_df.assign(sentence=sentence)
-data_df = data_df[data_df['sentence']!=""]
-data_df = data_df.drop([0], axis=1)
-
 color_dict = np.load('./color_dict.npy')
 color_dict = np.vectorize(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))(color_dict)
 color_dict = np.unique(color_dict)
