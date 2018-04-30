@@ -197,7 +197,7 @@ def get_ans(message,intent,userid):
     print("getting ans")
     prediction = intent_dict[intent]
     print("got intent",prediction)
-    current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=debug)
+    current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     print("getting tag")
     answer = ''
     if current_brand == '':
