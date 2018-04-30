@@ -174,8 +174,8 @@ def manage_user(userid,items):
     query = "SELECT * FROM chatbot WHERE `session_id`=%s"
     cursor.execute(sql, (userid))
     result = cursor.fetchone()
-    names = list(items)
-    cols = ', '.join(map(escape_name, names))
+    # names = list(items)
+    # cols = ', '.join(map(escape_name, names))
     if not result:
         sql = "INSERT INTO `chatbot` (`session_id`) VALUES (%s)"
         cursor.execute(sql, (userid))
@@ -184,16 +184,20 @@ def manage_user(userid,items):
     #     cursor.execute(query, items)
     # else:
     #     ss = zip(cols, list(items.values())
-    #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+    #     query = 'UPDATE chatbot SET session_id =%s,brand = %s,model = %s,capa=%s,color=%s,price=%s WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
     #     cursor.execute(query, items)
+    # query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
+    # cursor.execute(query, items)
     return result
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
 def get_ans(message,intent):
     # tokens = word_tokenize(message)
+    print("getting ans")
     prediction = intent_dict[intent]
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=debug)
+    print("getting tag")
     answer = ''
     if current_brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
