@@ -169,77 +169,31 @@ def escape_name(s):
     """
     return '`{}`'.format(s.replace('`', '``'))
 
-# def manage_user(userid,items):
-#     cursor = connection.cursor()
-#     query = "SELECT * FROM chatbot WHERE `session_id`=%s"
-#     cursor.execute(sql, (userid))
-#     result = cursor.fetchone()
-#     names = list(items)
-#     cols = ', '.join(map(escape_name, names))
-#     if not result:
-#         sql = "INSERT INTO `chatbot` (`sessionid`) VALUES (%s)"
-#         cursor.execute(sql, (user_id))
-#         connection.commit()
-#             # assumes the keys are *valid column names*.
-#     #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
-#     #     cursor.execute(query, items)
-#     # else:
-#     #     ss = zip(cols, list(items.values())
-#     #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
-#     #     cursor.execute(query, items)
-#     return result
+def manage_user(userid,items):
+    cursor = connection.cursor()
+    query = "SELECT * FROM chatbot WHERE `session_id`=%s"
+    cursor.execute(sql, (userid))
+    result = cursor.fetchone()
+    names = list(items)
+    cols = ', '.join(map(escape_name, names))
+    if not result:
+        sql = "INSERT INTO `chatbot` (`session_id`) VALUES (%s)"
+        cursor.execute(sql, (userid))
+        connection.commit()
+    #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
+    #     cursor.execute(query, items)
+    # else:
+    #     ss = zip(cols, list(items.values())
+    #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+    #     cursor.execute(query, items)
+    return result
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
 def get_ans(message,intent):
     tokens = word_tokenize(message)
     prediction = intent_dict[intent]
-    if prediction == '<PRICE>':
-        if(num_2_label_map[data[i,1]] == '<PRICE>'):
-            hit += 1
-        else:
-            miss += 1
-    elif prediction == '<BUY>':
-        if(num_2_label_map[data[i,1]] == '<BUY>'):
-            hit += 1
-        else:
-            miss += 1
-    elif prediction == '<INFO>':
-        if(num_2_label_map[data[i,1]] == '<INFO>'):
-            hit += 1
-        else:
-            miss += 1
-    else:
-        if(num_2_label_map[data[i,1]] == '<NONE>'):
-            hit += 1
-        else:
-            miss += 1
-    ## tagging part ##
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(data_tag[i,0],debug=debug)
-    for p in all_sen_pairs[i]:
-        if p[1] == 'brand':
-            if not current_brand:
-                tag_miss += 1
-            elif word_tokenize(current_brand)==p[0]:
-                tag_hit += 1
-            else:
-                tag_miss += 1
-        elif p[1] == 'model':
-            if not current_model:
-                tag_miss += 1
-            elif word_tokenize(current_model)==p[0]:
-                tag_hit += 1
-            else:
-                tag_miss += 1
-        elif p[1] == 'color':
-            if not current_color:
-                tag_miss += 1
-            elif word_tokenize(current_color)==p[0]:
-                tag_hit += 1
-            else:
-                tag_miss += 1
-        elif p[1] == 'other':
-            continue
     answer = ''
     if current_brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
