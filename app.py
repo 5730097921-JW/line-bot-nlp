@@ -170,24 +170,23 @@ def escape_name(s):
     return '`{}`'.format(s.replace('`', '``'))
 
 def manage_user(userid,items):
-    try:
-        cursor = connection.cursor()
-        query = "SELECT * FROM chatbot WHERE `session_id`=%s"
-        cursor.execute(sql, (userid))
-        result = cursor.fetchone()
-        names = list(items)
-        cols = ', '.join(map(escape_name, names))
-        if not result:
-            sql = "INSERT INTO `chatbot` (`sessionid`) VALUES (%s)"
-            cursor.execute(sql, (user_id))
-            connection.commit()
-              # assumes the keys are *valid column names*.
-        #     query = 'INSERT INTO chatbot ({}) VALUES ({})'.format(cols, list(items.values()))
-        #     cursor.execute(query, items)
-        # else:
-        #     ss = zip(cols, list(items.values())
-        #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
-        #     cursor.execute(query, items)
+    cursor = connection.cursor()
+    query = "SELECT * FROM chatbot WHERE `session_id`=%s"
+    cursor.execute(sql, (userid))
+    result = cursor.fetchone()
+    names = list(items)
+    cols = ', '.join(map(escape_name, names))
+    if not result:
+        sql = "INSERT INTO `chatbot` (`sessionid`) VALUES (%s)"
+        cursor.execute(sql, (user_id))
+        connection.commit()
+            # assumes the keys are *valid column names*.
+    #     query = 'INSERT INTO chatbot ({}) VALUES ({})'.format(cols, list(items.values()))
+    #     cursor.execute(query, items)
+    # else:
+    #     ss = zip(cols, list(items.values())
+    #     query = 'UPDATE chatbot SET ({}) VALUES ({}) WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+    #     cursor.execute(query, items)
     return result
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
@@ -215,7 +214,6 @@ def get_ans(message,intent):
             hit += 1
         else:
             miss += 1
-    
     ## tagging part ##
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(data_tag[i,0],debug=debug)
     for p in all_sen_pairs[i]:
