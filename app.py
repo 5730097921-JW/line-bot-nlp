@@ -24,6 +24,48 @@ import json
 import numpy as np
 import pandas as pd
 
+import re
+def clean_sentence(s):
+    s = s.lower()
+    if re.search(r'[bB]ot\s*:*',s):
+        return ''
+    s = re.sub(r'</*[a-zA-Z_]*>', '', s)
+    s = re.sub(r'[0-9]*\.', '', s)
+    s = re.sub(r'\s+', ' ', s)
+    return s.strip()
+def get_label(s):
+    label = re.findall(r'<[A-Z_]*>',s)
+    if label:
+        return label[0]
+    else:
+        return '<NONE>'
+def clean_sentence_for_tagging(s):
+    s = s
+    if re.search(r'[bB]ot\s*:*',s):
+        return ''
+    s = re.sub(r'[0-9]*\.', '', s)
+    s = re.sub(r'\s+', ' ', s)
+    return s.strip()
+def clean_color(s):
+    s = s.lower()
+    s = re.sub(r'สี','',s)
+    s = re.sub(r'\s+', ' ', s)
+    clean_dict = {'ขา':'ขาว',
+                 'เท่า':'เทา'}
+    if s in clean_dict:
+        s = clean_dict[s]
+    return s.strip()
+def clean_brand(s):
+    s = s.lower()
+    s = re.sub(r'\s+', ' ', s)
+    return s.strip()
+def clean_model(s):
+    s = s.strip().lower()
+    s = re.sub(r'\s+', ' ', s)
+    s = re.sub(r'iphone', '', s)
+    s = re.sub(r'[0-9]*\s*gb', '', s)
+    return s.strip()
+
 # Connect to the database
 connection = pymysql.connect(host='sql12.freemysqlhosting.net',
                              user='sql12235366',                                                   
