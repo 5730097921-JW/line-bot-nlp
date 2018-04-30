@@ -254,6 +254,7 @@ def insert_things(items):
     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
     cursor.execute(query, items)
     connection.commit()
+    print("inserted")
     return
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
@@ -264,7 +265,9 @@ def get_ans(message,intent,userid):
     prediction = intent_dict[intent]
     print("got intent",prediction)
     (userid,brand,model,capa,color,address) = get_user(userid)
+    print("got user")
     current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
+    print("got predict")
     if current_brand != brand and not brand:
         items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
     else:
@@ -277,6 +280,7 @@ def get_ans(message,intent,userid):
         if current_desc != address and not address:
             current_desc = address
         items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
+    print("item:",items)
     insert_things(items)
     print("getting tag")
     answer = ''
