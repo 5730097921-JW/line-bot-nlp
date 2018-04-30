@@ -254,6 +254,7 @@ def insert_things(items):
     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
     cursor.execute(query, items)
     connection.commit()
+    return
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
