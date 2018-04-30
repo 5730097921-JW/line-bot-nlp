@@ -256,7 +256,6 @@ def insert_things(items):
     cursor.execute(query, items)
     connection.commit()
     print("inserted")
-    return
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
