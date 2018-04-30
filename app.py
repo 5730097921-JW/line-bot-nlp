@@ -252,7 +252,7 @@ def get_user(userid):
 
 def insert_things(items):
     cursor = connection.cursor()
-    query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
+    query = "INSERT IGNORE INTO chatbot (session_id,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
     cursor.execute(query, items)
     connection.commit()
     print("inserted")
