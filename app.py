@@ -22,6 +22,7 @@ import pymysql
 import datetime
 import json
 import numpy as np
+import pandas as pd
 
 # Connect to the database
 connection = pymysql.connect(host='sql12.freemysqlhosting.net',
