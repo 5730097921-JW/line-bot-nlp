@@ -191,9 +191,9 @@ def manage_user(userid,items):
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
 
 def get_ans(message,intent):
-    tokens = word_tokenize(message)
+    # tokens = word_tokenize(message)
     prediction = intent_dict[intent]
-    current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(data_tag[i,0],debug=debug)
+    current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=debug)
     answer = ''
     if current_brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
