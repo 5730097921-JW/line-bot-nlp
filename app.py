@@ -285,6 +285,7 @@ def get_ans(message,intent,userid):
     print("got user")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
+    print(pred_item)
     # if current_brand != brand and current_brand:
     #     items = ('brand':current_brand,'model':current_model,'color':current_color,'capa':current_capacity,'address':current_desc)
     # else:
@@ -306,13 +307,13 @@ def get_ans(message,intent,userid):
     print("item:",item)
     insert_things(userid,item)
     answer = ''
-    if current_brand == '':
+    if item['brand'] == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
-    elif current_model == '':
+    elif item['model'] == '':
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
-        if current_brand == 'apple':
-            if current_capacity == '':
+        if item['brand'] == 'apple':
+            if item['capa'] == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -322,8 +323,8 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['price'].values
     elif prediction == '<INFO>':
-        if current_brand == 'apple':
-            if current_capacity == '':
+        if item['brand'] == 'apple':
+            if item['capa'] == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -333,10 +334,10 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description'].values
     elif prediction == '<BUY>':
-        if current_color == '':
+        if item['color'] == '':
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
-        elif current_brand == 'apple':
-            if current_capacity == '':
+        elif item['brand'] == 'apple':
+            if item['capa'] == '':
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
