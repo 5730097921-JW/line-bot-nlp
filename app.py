@@ -23,8 +23,10 @@ import datetime
 import json
 import numpy as np
 import pandas as pd
-
+import redis
 import re
+
+
 def clean_sentence(s):
     s = s.lower()
     if re.search(r'[bB]ot\s*:*',s):
@@ -65,6 +67,8 @@ def clean_model(s):
     s = re.sub(r'iphone', '', s)
     s = re.sub(r'[0-9]*\s*gb', '', s)
     return s.strip()
+
+r = redis.StrictRedis(host='redis-19121.c1.ap-southeast-1-1.ec2.cloud.redislabs.com',port=19121,password='NLPchatbotProject',decode_responses=True,db=0)
 
 # Connect to the database
 connection = pymysql.connect(host='sql12.freemysqlhosting.net',
@@ -159,6 +163,7 @@ def get_intention(sentence):
     return intention
 
 def predict_tag(sen, debug=True):
+    item={}
     current_brand = ''
     current_model = ''
     current_color = ''
@@ -171,6 +176,7 @@ def predict_tag(sen, debug=True):
             if debug:
                 print('brand = ',brand)
             current_brand = brand
+            item['brand'] = brand
             break
     if current_brand == '':
         for brand,mapped_brand in brand_dict_map.items():
@@ -178,6 +184,7 @@ def predict_tag(sen, debug=True):
                 if debug:
                     print('brand = ',mapped_brand)
                 current_brand = mapped_brand
+                item['']
                 break
     if current_brand == '':
         if debug:
@@ -188,6 +195,7 @@ def predict_tag(sen, debug=True):
             if debug:
                 print('model = ',model)
             current_model = model
+            item['model'] = model
             break
     if current_model == '':
         if debug:
@@ -198,6 +206,7 @@ def predict_tag(sen, debug=True):
             if debug:
                 print('color = ',color)
             current_color = color
+            item['color'] = color
             break
     if current_color == '':
         if debug:
@@ -206,13 +215,14 @@ def predict_tag(sen, debug=True):
     for capa in [8,16,32,64,128,256,512]:
         if re.search(r'{}\s*[Gg][Bb]'.format(capa),sen):
             current_capacity = capa
+            item['capa'] = capa
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
         current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
         if debug:
             print('desciption:\n',current_desc['description'])
     
-    return current_brand, current_model, current_color, current_capacity, current_desc
+    return item
 
 """
 DB (session_id,brand,model,capa,color,address)
@@ -228,33 +238,40 @@ def escape_name(s):
     return '`{}`'.format(s.replace('`', '``'))
 
 def get_user(userid):
-    cursor = connection.cursor()
-    sql = "SELECT * FROM chatbot WHERE `session_id`=%s"
-    cursor.execute(sql, (userid))
-    result = cursor.fetchone()
-    print("queried",result)
-    # names = list(items)
-    # cols = ', '.join(map(escape_name, names))
-    if not result:
-        sql = "INSERT INTO chatbot (`session_id`) VALUES (%s)"
-        cursor.execute(sql, (userid))
-        connection.commit()
-        result = (userid,'','','','','')
-    #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
-    #     cursor.execute(query, items)
-    # else:
-    #     ss = zip(cols, list(items.values())
-    #     query = 'UPDATE chatbot SET session_id =%s,brand = %s,model = %s,capa=%s,color=%s,price=%s WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
-    #     cursor.execute(query, items)
-    # query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
-    # cursor.execute(query, items)
-    return result
+    items = r.hgetall(userid)
+    if not items:
+        items = {'brand':'','model':'','color':'','capa':'','address':''}
+    return items
 
-def insert_things(items):
-    cursor = connection.cursor()
-    query = "REPLACE INTO chatbot (session_id,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
-    cursor.execute(query, items)
-    connection.commit()
+# def get_user(userid):
+#     cursor = connection.cursor()
+#     sql = "SELECT * FROM chatbot WHERE `session_id`=%s"
+#     cursor.execute(sql, (userid))
+#     result = cursor.fetchone()
+#     print("queried",result)
+#     # names = list(items)
+#     # cols = ', '.join(map(escape_name, names))
+#     if not result:
+#         sql = "INSERT INTO chatbot (`session_id`) VALUES (%s)"
+#         cursor.execute(sql, (userid))
+#         connection.commit()
+#         result = (userid,'','','','','')
+#     #     query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
+#     #     cursor.execute(query, items)
+#     # else:
+#     #     ss = zip(cols, list(items.values())
+#     #     query = 'UPDATE chatbot SET session_id =%s,brand = %s,model = %s,capa=%s,color=%s,price=%s WHERE `session_id`=%s'.format(ss[0],ss[1],userid)
+#     #     cursor.execute(query, items)
+#     # query = "INSERT IGNORE INTO chatbot (session_id, ,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s)"
+#     # cursor.execute(query, items)
+#     return result
+
+def insert_things(userid,items):
+    r.hmset(userid,items)
+    # cursor = connection.cursor()
+    # query = "REPLACE INTO chatbot (session_id,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
+    # cursor.execute(query, items)
+    # connection.commit()
     print("inserted")
 
 intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
@@ -263,26 +280,31 @@ def get_ans(message,intent,userid):
     # tokens = word_tokenize(message)
     print("getting ans")
     prediction = intent_dict[intent]
-    print("got intent",prediction)
-    (userid,brand,model,capa,color,address) = get_user(userid)
+    print("got intent:",prediction)
+    item = get_user(userid)
     print("got user")
-    current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
-    print("got predict")
-    if current_brand != brand and not brand:
-        items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
-    else:
-        if current_model != model and not model:
-            current_model = model
-        if current_color != color and not color:
-            current_color = color
-        if current_capacity != capa and not capa:
-            curent_capacity = capa
-        if current_desc != address and not address:
-            current_desc = address
-        items = (userid,current_brand,current_model,current_color,current_capacity,current_desc)
-    print("item:",items)
-    insert_things(items)
-    print("getting tag")
+    # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
+    pred_item = predict_tag(message,debug=True)
+    # if current_brand != brand and current_brand:
+    #     items = ('brand':current_brand,'model':current_model,'color':current_color,'capa':current_capacity,'address':current_desc)
+    # else:
+    #     if current_model != model and not model:
+    #         current_model = model
+    #     if current_color != color and not color:
+    #         current_color = color
+    #     if current_capacity != capa and not capa:
+    #         curent_capacity = capa
+    #     if current_desc != address and not address:
+    #         current_desc = address
+    #      items = ('brand':current_brand,'model':current_model,'color':current_color,'capa':current_capacity,'address':current_desc)
+    for w in pred_item:
+        if w == 'brand':
+            item = pred_item
+        else:
+            item[w] = pred_item[w]
+
+    print("item:",item)
+    insert_things(userid,item)
     answer = ''
     if current_brand == '':
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
@@ -295,10 +317,10 @@ def get_ans(message,intent,userid):
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
                                    (mobile_df.model==current_model)&
-                                   (mobile_df.capacity==current_capacity)]['price']
+                                   (mobile_df.capacity==current_capacity)]['price'].values
         else:
             answer = mobile_df[(mobile_df.brand==current_brand)&
-                               (mobile_df.model==current_model)]['price']
+                               (mobile_df.model==current_model)]['price'].values
     elif prediction == '<INFO>':
         if current_brand == 'apple':
             if current_capacity == '':
@@ -306,10 +328,10 @@ def get_ans(message,intent,userid):
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
                                    (mobile_df.model==current_model)&
-                                   (mobile_df.capacity==current_capacity)]['description']
+                                   (mobile_df.capacity==current_capacity)]['description'].values
         else:
             answer = mobile_df[(mobile_df.brand==current_brand)&
-                               (mobile_df.model==current_model)]['description']
+                               (mobile_df.model==current_model)]['description'].values
     elif prediction == '<BUY>':
         if current_color == '':
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
@@ -321,21 +343,17 @@ def get_ans(message,intent,userid):
                             brand: {}
                             model: {}
                             color: {}
-                            capacity: {}
-                            address: {}""".format(current_brand,
+                            capacity: {}""".format(current_brand,
                                                   current_model,
                                                   current_color,
-                                                  current_capacity,
-                                                  current_desc)
+                                                  current_capacity)
         else:
             answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
                         brand: {}
                         model: {}
-                        color: {}
-                        address: {}""".format(current_brand,
+                        color: {}""".format(current_brand,
                                               current_model,
-                                              current_color,
-                                              current_desc)
+                                              current_color)
     return answer
 
 @handler.add(MessageEvent, message=TextMessage)

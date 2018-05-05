@@ -7,3 +7,4 @@ gunicorn==19.0.0
 tensorflow
 numpy
 pandas
+redis
