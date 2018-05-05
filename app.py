@@ -184,7 +184,7 @@ def predict_tag(sen, debug=True):
                 if debug:
                     print('brand = ',mapped_brand)
                 current_brand = mapped_brand
-                item['brand'] = brand
+                item['brand'] = mapped_brand
                 break
     if current_brand == '':
         if debug:
@@ -290,7 +290,7 @@ def get_ans(message,intent,userid):
             prediction = item['intent']
         except KeyError:# set price as default intent
             prediction = '<PRICE>'
-    
+    item['intent'] = prediction
     print("got user")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
