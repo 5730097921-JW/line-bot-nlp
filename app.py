@@ -309,13 +309,13 @@ def get_ans(message,intent,userid):
     print("item:",item)
     insert_things(userid,item)
     answer = ''
-    if item['brand'] == '':
+    if 'brand' not in item:
         answer = 'กรุณาระบุยี่ห้อด้วยครับ'
-    elif item['model'] == '':
+    elif 'model' not in item:
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
         if item['brand'] == 'apple':
-            if item['capa'] == '':
+            if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -326,7 +326,7 @@ def get_ans(message,intent,userid):
                                (mobile_df.model==current_model)]['price'].values
     elif prediction == '<INFO>':
         if item['brand'] == 'apple':
-            if item['capa'] == '':
+            if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = mobile_df[(mobile_df.brand=='apple')&
@@ -336,10 +336,10 @@ def get_ans(message,intent,userid):
             answer = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description'].values
     elif prediction == '<BUY>':
-        if item['color'] == '':
+        if 'color' not in item:
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
         elif item['brand'] == 'apple':
-            if item['capa'] == '':
+            if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
