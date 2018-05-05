@@ -184,7 +184,7 @@ def predict_tag(sen, debug=True):
                 if debug:
                     print('brand = ',mapped_brand)
                 current_brand = mapped_brand
-                item['']
+                item['brand'] = brand
                 break
     if current_brand == '':
         if debug:
@@ -218,6 +218,7 @@ def predict_tag(sen, debug=True):
             item['capa'] = capa
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
+        # but do i need this?
         current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
         if debug:
             print('desciption:\n',current_desc['description'])
