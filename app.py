@@ -269,6 +269,7 @@ def get_user(userid):
 #     return result
 
 def insert_things(userid,items):
+    r.delete(userid)
     if r.hmset(userid,items):
         print("inserted")
     # cursor = connection.cursor()
