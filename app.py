@@ -366,6 +366,7 @@ def get_ans(message,intent,userid):
                         color: {}""".format(current_brand,
                                               current_model,
                                               current_color)
+    print('ans:',answer)
     return answer
 
 @handler.add(MessageEvent, message=TextMessage)
