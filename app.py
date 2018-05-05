@@ -240,6 +240,7 @@ def escape_name(s):
 
 def get_user(userid):
     items = r.hgetall(userid)
+    print(userid,item)
     if not items:
         items = {'brand':'','model':'','color':'','capa':'','address':''}
     return items
