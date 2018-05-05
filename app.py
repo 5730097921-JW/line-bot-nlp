@@ -221,7 +221,7 @@ def predict_tag(sen, debug=True):
         current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
         if debug:
             print('desciption:\n',current_desc['description'])
-    
+    print(item)
     return item
 
 """
@@ -299,6 +299,7 @@ def get_ans(message,intent,userid):
     #         current_desc = address
     #      items = ('brand':current_brand,'model':current_model,'color':current_color,'capa':current_capacity,'address':current_desc)
     for w in pred_item:
+        print(w)
         if w == 'brand':
             item = pred_item
         else:
