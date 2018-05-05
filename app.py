@@ -239,11 +239,11 @@ def escape_name(s):
     return '`{}`'.format(s.replace('`', '``'))
 
 def get_user(userid):
-    items = r.hgetall(userid)
+    item = r.hgetall(userid)
     print(userid,item)
-    if not items:
-        items = {'brand':'','model':'','color':'','capa':'','address':''}
-    return items
+    if not item:
+        item = {'brand':'','model':'','color':'','capa':''}
+    return item
 
 # def get_user(userid):
 #     cursor = connection.cursor()
@@ -269,14 +269,15 @@ def get_user(userid):
 #     return result
 
 def insert_things(userid,items):
-    r.hmset(userid,items)
+    if r.hmset(userid,items):
+        print("inserted")
     # cursor = connection.cursor()
     # query = "REPLACE INTO chatbot (session_id,brand,model,capa,color,price) VALUES (%s, %s,%s, %s,%s,%s)"
     # cursor.execute(query, items)
     # connection.commit()
-    print("inserted")
+    
 
-intent_dict ={0:'<PRICE>',1:'<INFO>',2:'<BUY>'}
+intent_dict ={0: '<PRICE>', 1: '<INFO>', 2: '<NONE>', 3: '<BUY>'}
 
 def get_ans(message,intent,userid):
     # tokens = word_tokenize(message)
@@ -284,6 +285,12 @@ def get_ans(message,intent,userid):
     prediction = intent_dict[intent]
     print("got intent:",prediction)
     item = get_user(userid)
+    if prediction == '<NONE>':
+        try:
+            prediction = item['intent']
+        except KeyError:# set price as default intent
+            prediction = '<PRICE>'
+    
     print("got user")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
