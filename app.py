@@ -292,7 +292,6 @@ def get_ans(message,intent,userid):
         except KeyError:# set price as default intent
             prediction = '<PRICE>'
     print("using intent:",prediction)
-    item['intent'] = prediction
     print("got user")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
@@ -315,7 +314,7 @@ def get_ans(message,intent,userid):
             item = pred_item
         else:
             item[w] = pred_item[w]
-
+    item['intent'] = prediction
     print("item:",item)
     insert_things(userid,item)
     answer = ''
