@@ -293,6 +293,8 @@ def get_ans(message,intent,userid):
             prediction = '<PRICE>'
     print("using intent:",prediction)
     print("got user")
+    if not mobile_df:
+        print("phone data not found")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
     print(pred_item)
@@ -330,20 +332,20 @@ def get_ans(message,intent,userid):
                 description = mobile_df[(mobile_df.brand=='apple')&
                                    (mobile_df.model==current_model)&
                                    (mobile_df.capacity==current_capacity)]['price'].values
-                if description:
-                    answer = description
+                if len(description) > 0:
+                    answer = description[0]
                 else:
                     answer = """ไม่พบข้อมูลโทรศัพท์
-                                brand: {}
-                                model: {}
-                                capacity: {}""".format(item['brand'],
+                    brand: {}
+                    model: {}
+                    capacity: {}""".format(item['brand'],
                                                     item['model'],
                                                     item['capa'])
         else:
             description = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['price'].values
-            if description:
-                answer = description
+            if len(description) > 0:
+                answer = description[0]
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
@@ -357,8 +359,8 @@ def get_ans(message,intent,userid):
                 description = mobile_df[(mobile_df.brand=='apple')&
                                    (mobile_df.model==current_model)&
                                    (mobile_df.capacity==current_capacity)]['description'].values
-                if description:
-                    answer = description
+                if len(description)>0:
+                    answer = description[0]
                 else:
                     answer = """ไม่พบข้อมูลโทรศัพท์
                                 brand: {}
@@ -369,8 +371,8 @@ def get_ans(message,intent,userid):
         else:
             description = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description'].values
-            if description:
-                answer = description
+            if len(description)>0:
+                answer = description[0]
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
