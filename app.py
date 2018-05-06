@@ -242,7 +242,7 @@ def get_user(userid):
     item = r.hgetall(userid)
     print(userid,item)
     if not item:
-        item = {'brand':'','model':'','color':'','capa':''}
+        item = {}
     return item
 
 # def get_user(userid):
@@ -291,6 +291,7 @@ def get_ans(message,intent,userid):
             prediction = item['intent']
         except KeyError:# set price as default intent
             prediction = '<PRICE>'
+    print("using intent:",prediction)
     item['intent'] = prediction
     print("got user")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
@@ -355,17 +356,17 @@ def get_ans(message,intent,userid):
                             brand: {}
                             model: {}
                             color: {}
-                            capacity: {}""".format(current_brand,
-                                                  current_model,
-                                                  current_color,
-                                                  current_capacity)
+                            capacity: {}""".format(item['brand'],
+                                                  item['model'],
+                                                  item['color'],
+                                                  item['capa'])
         else:
             answer = """กรุณายืนยันการสั่งสินค้าด้วยครับ
                         brand: {}
                         model: {}
-                        color: {}""".format(current_brand,
-                                              current_model,
-                                              current_color)
+                        color: {}""".format(item['brand'],
+                                            item['model'],
+                                            item['color'])
     print('ans:',answer)
     return answer
 
