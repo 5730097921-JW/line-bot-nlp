@@ -339,12 +339,14 @@ def get_ans(message,intent,userid):
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
-                answer = mobile_df[(mobile_df.brand=='apple')&
+                description = mobile_df[(mobile_df.brand=='apple')&
                                    (mobile_df.model==current_model)&
                                    (mobile_df.capacity==current_capacity)]['description'].values
+                answer = 'description: '+description
         else:
-            answer = mobile_df[(mobile_df.brand==current_brand)&
+            description = mobile_df[(mobile_df.brand==current_brand)&
                                (mobile_df.model==current_model)]['description'].values
+            answer = 'description: '+description
     elif prediction == '<BUY>':
         if 'color' not in item:
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
