@@ -71,10 +71,10 @@ def clean_model(s):
 r = redis.StrictRedis(host='redis-19121.c1.ap-southeast-1-1.ec2.cloud.redislabs.com',port=19121,password='NLPchatbotProject',decode_responses=True,db=0)
 
 # Connect to the database
-connection = pymysql.connect(host='sql12.freemysqlhosting.net',
-                             user='sql12235366',                                                   
-                             password='49VyS4LHJS',
-                             database='sql12235366')
+# connection = pymysql.connect(host='sql12.freemysqlhosting.net',
+#                              user='sql12235366',                                                   
+#                              password='49VyS4LHJS',
+#                              database='sql12235366')
 
 from flask import Flask, request, abort
 from linebot import (
