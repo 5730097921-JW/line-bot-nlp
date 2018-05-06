@@ -222,7 +222,6 @@ def predict_tag(sen, debug=True):
         current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
         if debug:
             print('desciption:\n',current_desc['description'])
-    print(item)
     return item
 
 """
@@ -295,6 +294,7 @@ def get_ans(message,intent,userid):
     print("got user")
     if not mobile_df:
         print("phone data not found")
+    print("phone found")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
     print(pred_item)
