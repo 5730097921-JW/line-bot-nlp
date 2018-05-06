@@ -224,18 +224,6 @@ def predict_tag(sen, debug=True):
             print('desciption:\n',current_desc['description'])
     return item
 
-"""
-DB (session_id,brand,model,capa,color,address)
-"""
-def escape_name(s):
-    """Escape name to avoid SQL injection and keyword clashes.
-
-    Doubles embedded backticks, surrounds the whole in backticks.
-
-    Note: not security hardened, caveat emptor.
-
-    """
-    return '`{}`'.format(s.replace('`', '``'))
 
 def get_user(userid):
     item = r.hgetall(userid)
@@ -292,9 +280,9 @@ def get_ans(message,intent,userid):
             prediction = '<PRICE>'
     print("using intent:",prediction)
     print("got user")
-    if not mobile_df:
-        print("phone data not found")
-    print("phone found")
+    if not model_dict:
+        print("model data not found")
+    # print("phone found")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
     print(pred_item)
