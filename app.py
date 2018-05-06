@@ -18,7 +18,6 @@ from argparse import ArgumentParser
 from pythainlp import word_tokenize
 from keras.models import model_from_json
 import pickle
-import pymysql
 import datetime
 import json
 import numpy as np
