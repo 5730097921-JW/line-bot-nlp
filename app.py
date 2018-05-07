@@ -214,10 +214,8 @@ def predict_tag(sen, debug=True):
 #         break
     for capa in [8,16,32,64,128,256,512]:
         if re.search(r'{}\s*[Gg][Bb]'.format(capa),sen):
-            current_capacity = capa+' GB'
-            item['capa'] = capa+' GB'
-            if debug:
-                print('capa:',item['capa'])
+            current_capacity = str(capa)+' GB'
+            item['capa'] = str(capa)+' GB'
     # if current_brand !='' and current_model != '':
         # not sure should use head or not??
         # but do i need this?
@@ -303,7 +301,7 @@ def get_ans(message,intent,userid):
         print(w)
         if w == 'brand':
             item = pred_item
-        else:
+        elif w not in item:
             item[w] = pred_item[w]
     if prediction == '<NONE>':
         try:
