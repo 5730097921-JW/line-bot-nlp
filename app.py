@@ -313,7 +313,7 @@ def get_ans(message,intent,userid):
     elif 'model' not in item:
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
-        print("GETTING PRICE")
+        print("GETTING PRICE") # stuck here, WHY?????
         if item['brand'] == 'apple':
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
@@ -331,8 +331,10 @@ def get_ans(message,intent,userid):
                                                     item['model'],
                                                     item['capa'])
         else:
+            print("getting desc")
             description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&
-                               (mobile_df.model.str.contains(current_model)==True)]['price'].values
+                               (mobile_df.model.str.tolower().contains(current_model)==True)]['price'].values
+            print("got desc")
             if len(description) > 0:
                 answer = description[0]
             else:
