@@ -326,7 +326,7 @@ def get_ans(message,intent,userid):
             else:
                 description = mobile_df[(mobile_df['brand']=='apple')&(mobile_df['model'].str.contains(item['model'])==True)&(mobile_df['capacity'].str.contains(item['capa'])==True)]['price'].head(1).values
                 if len(description) > 0:
-                    answer = description
+                    answer = description[0]
                 else:
                     answer = """ไม่พบข้อมูลโทรศัพท์
                     brand: {}
@@ -337,7 +337,7 @@ def get_ans(message,intent,userid):
             description = mobile_df[(mobile_df['brand'].str.contains(item['brand'])==True)&(mobile_df['model'].str.contains(item['model'])==True)]['price'].head(1).values
             print("got desc")
             if len(description) > 0:
-                answer = description
+                answer = description[0]
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
@@ -351,7 +351,7 @@ def get_ans(message,intent,userid):
             else:
                 description = mobile_df[(mobile_df['brand']=='apple')&(mobile_df['model'].str.contains(item['model'])==True)&(mobile_df['capacity'].str.contains(item['capa'])==True)]['description'].head(1).values
                 if len(description)>0:
-                    answer = description
+                    answer = description[0]
                 else:
                     answer = """ไม่พบข้อมูลโทรศัพท์
                                 brand: {}
@@ -362,7 +362,7 @@ def get_ans(message,intent,userid):
         else:
             description = mobile_df[(mobile_df['brand'].str.contains(item['brand'])==True)&(mobile_df['model'].str.contains(item['model'])==True)]['description'].head(1).values
             if len(description)>0:
-                answer = description
+                answer = description[0]
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
