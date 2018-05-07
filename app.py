@@ -282,6 +282,8 @@ def get_ans(message,intent,userid):
             prediction = '<PRICE>'
     print("using intent:",prediction)
     print("got user")
+    d = mobile_df[(mobile_df.brand=='apple')&(mobile_df.capacity=='16 GB')]['description'].values
+    print(d)
     # print("phone found")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
