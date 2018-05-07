@@ -189,8 +189,8 @@ def predict_tag(sen, debug=True):
         if debug:
             print('no brand')
 #         break
+    longest = 0
     for model in model_dict:
-        longest = 0
         if sen.lower().find(model.lower()) != -1:
             if len(model) < longest:
                 continue
