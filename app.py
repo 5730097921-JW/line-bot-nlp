@@ -223,7 +223,7 @@ def predict_tag(sen, debug=True):
         # but do i need this?
         current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
         if debug:
-            print('desciption:\n',current_desc['description'])
+            print('desciption:\n',current_desc['description'].values[0])
     return item
 
 
@@ -313,7 +313,6 @@ def get_ans(message,intent,userid):
     elif 'model' not in item:
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
-        print("GETTING PRICE") # stuck here, WHY?????
         if item['brand'] == 'apple':
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
@@ -333,10 +332,10 @@ def get_ans(message,intent,userid):
         else:
             print("getting desc")
             description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&
-                               (mobile_df.model.str.tolower().contains(current_model)==True)]['price'].values
+                               (mobile_df.model.str.tolower().contains(current_model)==True)]['price'].head(1)
             print("got desc")
             if len(description) > 0:
-                answer = description[0]
+                answer = description.values[0]
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
