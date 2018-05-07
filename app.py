@@ -199,7 +199,6 @@ def predict_tag(sen, debug=True):
                 print('model = ',model)
             current_model = model
             item['model'] = model
-            break
     if current_model == '':
         if debug:
             print('no model')
