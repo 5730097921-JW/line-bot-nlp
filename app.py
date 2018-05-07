@@ -318,24 +318,24 @@ def get_ans(message,intent,userid):
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 # description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['price'].values
-                if len(description) > 0:
-                    answer = item['price']
-                else:
-                    answer = """ไม่พบข้อมูลโทรศัพท์
-                    brand: {}
-                    model: {}
-                    capacity: {}""".format(item['brand'],item['model'],item['capa'])
+                # if len(description) > 0:
+                answer = item['price']
+                # else:
+                    # answer = """ไม่พบข้อมูลโทรศัพท์
+                    # brand: {}
+                    # model: {}
+                    # capacity: {}""".format(item['brand'],item['model'],item['capa'])
         else:
             print("getting desc")
             # description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.tolower().contains(current_model)==True)]['price'].head(1)
-            print("got desc")
-            if len(description) > 0:
-                answer = item['price']
-            else:
-                answer = """ไม่พบข้อมูลโทรศัพท์
-                            brand: {}
-                            model: {}""".format(item['brand'],
-                                                item['model'])
+            # print("got desc")
+            # if len(description) > 0:
+            answer = item['price']
+            # else:
+                # answer = """ไม่พบข้อมูลโทรศัพท์
+                #             brand: {}
+                #             model: {}""".format(item['brand'],
+                #                                 item['model'])
     elif prediction == '<INFO>':
         print("GETTING INFO")
         if item['brand'] == 'apple':
@@ -343,24 +343,24 @@ def get_ans(message,intent,userid):
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 # description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['description'].values
-                if len(description)>0:
-                    answer = item['description']
-                else:
-                    answer = """ไม่พบข้อมูลโทรศัพท์
-                                brand: {}
-                                model: {}
-                                capacity: {}""".format(item['brand'],
-                                                    item['model'],
-                                                    item['capa'])
+                # if len(description)>0:
+                answer = item['description']
+                # else:
+                    # answer = """ไม่พบข้อมูลโทรศัพท์
+                    #             brand: {}
+                    #             model: {}
+                    #             capacity: {}""".format(item['brand'],
+                    #                                 item['model'],
+                    #                                 item['capa'])
         else:
             # description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.contains(current_model)==True)]['description'].values
-            if len(description)>0:
-                answer = item['description']
-            else:
-                answer = """ไม่พบข้อมูลโทรศัพท์
-                            brand: {}
-                            model: {}""".format(item['brand'],
-                                                item['model'])
+            # if len(description)>0:
+            answer = item['description']
+            # else:
+                # answer = """ไม่พบข้อมูลโทรศัพท์
+                #             brand: {}
+                #             model: {}""".format(item['brand'],
+                #                                 item['model'])
     elif prediction == '<BUY>':
         if 'color' not in item:
             answer = 'กรุณาระบุสีที่ต้องการด้วยครับ'
