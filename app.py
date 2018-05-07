@@ -219,9 +219,11 @@ def predict_tag(sen, debug=True):
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
         # but do i need this?
-        current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1).values[0]
+        current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['description'].head(1).values[0]
+        price =  mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['price'].head(1).values[0]
         if debug:
-            print('desciption:\n',current_desc)
+            print('desciption:',current_desc)
+            print('price:',price)
     return item
 
 
