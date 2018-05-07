@@ -111,8 +111,6 @@ brand_dict_map = {'iphone':'apple','ไอโฟน':'apple','galaxy':'samsung'}
 mobile_df = pd.read_csv('mobile.csv',names=['brand','model','price','color','capacity','description'])
 mobile_df.color = mobile_df.color.apply(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))
 mobile_df.model = mobile_df.model.apply(lambda k: clean_model(k))
-mobile_df.head()
-mobile_df.describe(include='all')
 
 color_dict = np.load('./color_dict.npy')
 color_dict = np.vectorize(lambda k: ':'.join([clean_color(s) for s in k.split(':')]))(color_dict)
@@ -221,9 +219,9 @@ def predict_tag(sen, debug=True):
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
         # but do i need this?
-        current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1)
+        current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)].head(1).values[0]
         if debug:
-            print('desciption:\n',current_desc['description'].values[0])
+            print('desciption:\n',current_desc)
     return item
 
 
