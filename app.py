@@ -279,7 +279,7 @@ def get_ans(message,intent,userid):
         try:
             prediction = item['intent']
         except KeyError:# set price as default intent
-            prediction = '<PRICE>'
+            prediction = '<INFO>'
     print("using intent:",prediction)
     print("got user")
     # print("phone found")
