@@ -219,11 +219,11 @@ def predict_tag(sen, debug=True):
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
         # but do i need this?
-        current_desc = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['description'].head(1).values[0]
-        price =  mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['price'].head(1).values[0]
+        item['description'] = mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['description'].head(1).values[0]
+        item['price'] =  mobile_df[(mobile_df['brand'] == current_brand) & (mobile_df['model']==current_model)]['price'].head(1).values[0]
         if debug:
-            print('desciption:',current_desc)
-            print('price:',price)
+            print('desciption:',item['description'])
+            print('price:',item['price'])
     return item
 
 
@@ -335,7 +335,7 @@ def get_ans(message,intent,userid):
                                (mobile_df.model.str.tolower().contains(current_model)==True)]['price'].head(1)
             print("got desc")
             if len(description) > 0:
-                answer = description.values[0]
+                answer = item['price']
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
@@ -363,7 +363,7 @@ def get_ans(message,intent,userid):
             description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&
                                (mobile_df.model.str.contains(current_model)==True)]['description'].values
             if len(description)>0:
-                answer = description[0]
+                answer = ditem['description']
             else:
                 answer = """ไม่พบข้อมูลโทรศัพท์
                             brand: {}
