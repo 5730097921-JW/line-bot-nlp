@@ -267,10 +267,10 @@ def insert_things(userid,items):
     # connection.commit()
     
 
-def get_info(brand,model,capa,type):
-    if brand =='apple':
-        return mobile_df[(mobile_df['brand'] == 'apple') & (mobile_df['model'].str.contains(model)==True) & (mobile_df['capa'].str.contains(capa)==True)][type].head(1).values[0]
-    return mobile_df[(mobile_df['brand'].str.contains(brand)==True) & (mobile_df['model'].str.contains(model)==True)][type].head(1).values[0]
+# def get_info(brand,model,capa,type):
+#     if brand =='apple':
+#         return mobile_df[(mobile_df['brand'] == 'apple') & (mobile_df['model'].str.contains(model)==True) & (mobile_df['capa'].str.contains(capa)==True)][type].head(1).values[0]
+#     return mobile_df[(mobile_df['brand'].str.contains(brand)==True) & (mobile_df['model'].str.contains(model)==True)][type].head(1).values[0]
 
 intent_dict ={0: '<PRICE>', 1: '<INFO>', 2: '<NONE>', 3: '<BUY>'}
 
