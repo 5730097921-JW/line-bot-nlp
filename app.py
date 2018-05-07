@@ -317,7 +317,7 @@ def get_ans(message,intent,userid):
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
-                description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['price'].values
+                description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['price'].head(1).values
                 if len(description) > 0:
                     answer = description
                 else:
@@ -327,7 +327,7 @@ def get_ans(message,intent,userid):
                     capacity: {}""".format(item['brand'],item['model'],item['capa'])
         else:
             print("getting desc")
-            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.tolower().contains(current_model)==True)]['price'].head(1)
+            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.tolower().contains(current_model)==True)]['price'].head(1).values
             print("got desc")
             if len(description) > 0:
                 answer = description
@@ -342,7 +342,7 @@ def get_ans(message,intent,userid):
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
-                description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['description'].values
+                description = mobile_df[(mobile_df.brand=='apple')&(mobile_df.model.str.contains(current_model)==True)&(mobile_df.capacity.str.contains(current_capacity)==True)]['description'].head(1).values
                 if len(description)>0:
                     answer = description
                 else:
@@ -353,7 +353,7 @@ def get_ans(message,intent,userid):
                                                     item['model'],
                                                     item['capa'])
         else:
-            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.contains(current_model)==True)]['description'].values
+            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&(mobile_df.model.str.contains(current_model)==True)]['description'].head(1).values
             if len(description)>0:
                 answer = description
             else:
