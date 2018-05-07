@@ -282,8 +282,6 @@ def get_ans(message,intent,userid):
             prediction = '<PRICE>'
     print("using intent:",prediction)
     print("got user")
-    d = mobile_df[(mobile_df.brand=='apple')&(mobile_df.capacity=='16 GB')]['description'].values
-    print(d)
     # print("phone found")
     # current_brand,current_model,current_color,current_capacity,current_desc = predict_tag(message,debug=True)
     pred_item = predict_tag(message,debug=True)
@@ -315,13 +313,14 @@ def get_ans(message,intent,userid):
     elif 'model' not in item:
         answer = 'กรุณาระบุรุ่นด้วยครับ'
     elif prediction == '<PRICE>':
+        print("GETTING PRICE")
         if item['brand'] == 'apple':
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 description = mobile_df[(mobile_df.brand=='apple')&
-                                   (mobile_df.model==current_model)&
-                                   (mobile_df.capacity==current_capacity)]['price'].values
+                                   (mobile_df.model.str.contains(current_model)==True)&
+                                   (mobile_df.capacity.str.contains(current_capacity)==True)]['price'].values
                 if len(description) > 0:
                     answer = description[0]
                 else:
@@ -332,8 +331,8 @@ def get_ans(message,intent,userid):
                                                     item['model'],
                                                     item['capa'])
         else:
-            description = mobile_df[(mobile_df.brand==current_brand)&
-                               (mobile_df.model==current_model)]['price'].values
+            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&
+                               (mobile_df.model.str.contains(current_model)==True)]['price'].values
             if len(description) > 0:
                 answer = description[0]
             else:
@@ -342,13 +341,14 @@ def get_ans(message,intent,userid):
                             model: {}""".format(item['brand'],
                                                 item['model'])
     elif prediction == '<INFO>':
+        print("GETTING INFO")
         if item['brand'] == 'apple':
             if 'capa' not in item:
                 answer = 'กรุณาระบุขนาดความจุด้วยครับ'
             else:
                 description = mobile_df[(mobile_df.brand=='apple')&
-                                   (mobile_df.model==current_model)&
-                                   (mobile_df.capacity==current_capacity)]['description'].values
+                                   (mobile_df.model.str.contains(current_model)==True)&
+                                   (mobile_df.capacity.str.contains(current_capacity)==True)]['description'].values
                 if len(description)>0:
                     answer = description[0]
                 else:
@@ -359,8 +359,8 @@ def get_ans(message,intent,userid):
                                                     item['model'],
                                                     item['capa'])
         else:
-            description = mobile_df[(mobile_df.brand==current_brand)&
-                               (mobile_df.model==current_model)]['description'].values
+            description = mobile_df[(mobile_df.brand.str.contains(current_brand)==True)&
+                               (mobile_df.model.str.contains(current_model)==True)]['description'].values
             if len(description)>0:
                 answer = description[0]
             else:
