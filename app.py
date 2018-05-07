@@ -190,7 +190,11 @@ def predict_tag(sen, debug=True):
             print('no brand')
 #         break
     for model in model_dict:
+        longest = 0
         if sen.lower().find(model) != -1:
+            if len(model) < longest:
+                continue
+            longest = len(model)
             if debug:
                 print('model = ',model)
             current_model = model
@@ -213,8 +217,8 @@ def predict_tag(sen, debug=True):
 #         break
     for capa in [8,16,32,64,128,256,512]:
         if re.search(r'{}\s*[Gg][Bb]'.format(capa),sen):
-            current_capacity = capa
-            item['capa'] = capa
+            current_capacity = capa+' GB'
+            item['capa'] = capa+' GB'
     if current_brand !='' and current_model != '':
         # not sure should use head or not??
         # but do i need this?
